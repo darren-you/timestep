@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="16px" height="16px" viewBox="0 0 16 16" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>勾</title>
+    <g id="课表" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="设置课程颜色" transform="translate(-358.000000, -68.000000)" fill-rule="nonzero">
+            <g id="TitleBar/带加号" transform="translate(0.000000, 51.000000)">
+                <g id="勾" transform="translate(358.000000, 17.000000)">
+                    <rect id="矩形" fill="#000000" opacity="0" x="0" y="0" width="16" height="16"></rect>
+                    <polygon id="路径" fill="#272636" points="15.6953594 4.16915625 6.52235938 13.4529062 6.25376563 13.7059375 5.98517188 13.4529219 0.304625 7.70371875 2.15676563 5.82892188 6.25329688 9.97548438 13.8432031 2.29407813 15.6953438 4.16915625"></polygon>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

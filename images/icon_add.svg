@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="16px" height="16px" viewBox="0 0 16 16" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>加</title>
+    <g id="课表" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="TitleBar/带加号" transform="translate(-358.000000, -17.000000)" fill-rule="nonzero">
+            <g id="加" transform="translate(358.000000, 17.000000)">
+                <rect id="矩形" fill="#000000" opacity="0" x="0" y="0" width="16" height="16"></rect>
+                <polygon id="路径" fill="#272636" points="9.07378125 6.84359375 9.07378125 1.22142188 6.82490625 1.22142188 6.82490625 6.84360937 1.20273437 6.84360937 1.20273437 9.09246875 6.82492187 9.09246875 6.82492187 14.7146563 9.07378125 14.7146563 9.07378125 9.09246875 14.6959687 9.09246875 14.6959687 6.84359375"></polygon>
+            </g>
+        </g>
+    </g>
+</svg>

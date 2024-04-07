@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="16px" height="16px" viewBox="0 0 16 16" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>back</title>
+    <g id="课表" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="TitleBar备份" transform="translate(-16.000000, -17.000000)" fill="#000000" fill-rule="nonzero">
+            <g id="back" transform="translate(16.000000, 17.000000)">
+                <rect id="矩形" opacity="0" x="0" y="0" width="16" height="16"></rect>
+                <polygon id="路径" points="11.1225156 15.2615313 12.5022031 13.9151094 6.31864063 8.03076563 12.5022188 2.1464375 11.1225313 0.8 3.55932813 8.03078125 11.1225 15.2615156"></polygon>
+            </g>
+        </g>
+    </g>
+</svg>
