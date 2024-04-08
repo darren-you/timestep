@@ -1,4 +1,5 @@
 import 'package:get/get.dart';
+import 'package:timestep/business/todo/todo_page_vm.dart';
 
 import '../business/app/about_app/about_wejinda_page.dart';
 import '../business/app/about_app/about_wejinda_page_vm.dart';
@@ -6,7 +7,7 @@ import '../business/app/check_update/app_update_page.dart';
 import '../business/app/check_update/app_update_page_vm.dart';
 import '../business/home_nav/bnp_vm.dart';
 import '../business/home_nav/bottom_nav_page.dart';
-import '../business/school/school_page_vm.dart';
+
 import '../business/service_environment/base_url_page.dart';
 import '../business/service_environment/base_url_page_vm.dart';
 import '../business/time_table/course_info/course_info_page.dart';
@@ -40,7 +41,7 @@ class AppRountes {
           Get.lazyPut(() => TimeTableViewModel());
           Get.lazyPut<CourseDataService>(() => CourseDataImpl());
           Get.lazyPut<AccountDataService>(() => AccountDataImpl());
-          Get.lazyPut(() => SchoolPageViewModel());
+          Get.lazyPut(() => TodoPageViewModel());
           Get.lazyPut(() => UserPageViewModel());
         },
       ),

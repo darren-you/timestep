@@ -5,10 +5,10 @@ import '../../enumm/color_enum.dart';
 
 class AnimatedToast extends StatefulWidget {
   final BuildContext context;
-  OverlayEntry? overlayEntry;
+  final OverlayEntry? overlayEntry;
   final String? msg;
 
-  AnimatedToast(
+  const AnimatedToast(
       {super.key,
       required this.context,
       required this.overlayEntry,

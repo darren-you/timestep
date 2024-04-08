@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:timestep/business/overview/overview_page.dart';
 
 import '../../components/view/custom_bottom_sheet_msg_dialog.dart';
 import '../../components/keep_alive_wrapper.dart';
@@ -14,7 +15,7 @@ import '../user/repository/account_data_service.dart';
 import '../../net/net_manager.dart';
 import '../../utils/page_path_util.dart';
 import '../user/account_center/user_page.dart';
-import '../school/school_page.dart';
+import '../todo/todo_page.dart';
 import '../time_table/course_table/time_table_page.dart';
 import '../user/account_center/user_page_vm.dart';
 
@@ -29,9 +30,8 @@ class BottomNavViewModel extends GetxController {
   // PagerView 中加载的页面
   final pagerList = const [
     KeepAliveWrapper(child: TimeTablePages()),
-    //TimeTablePage(),
-    KeepAliveWrapper(child: SchoolPage()),
-    KeepAliveWrapper(child: UserPage()),
+    KeepAliveWrapper(child: TodoPage()),
+    KeepAliveWrapper(child: OverViewPage()),
   ];
 
   // 底部导航栏 Item
