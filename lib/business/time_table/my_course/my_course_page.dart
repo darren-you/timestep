@@ -14,6 +14,7 @@ import '../../../enumm/appbar_enum.dart';
 import '../../../enumm/color_enum.dart';
 import '../../../enumm/course_enum.dart';
 import '../../../utils/assert_util.dart';
+import '../../../utils/my_screen_util.dart';
 import '../course_table/timetable_vm.dart';
 import 'model/course_info.dart';
 import '../repository/local_test_course_data.dart';
@@ -248,7 +249,7 @@ Widget _courseList(BuildContext context) {
 }
 
 class MyCoursePage extends GetView<MyCoursePageViewModel> {
-  const MyCoursePage({Key? key}) : super(key: key);
+  const MyCoursePage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -256,6 +257,8 @@ class MyCoursePage extends GetView<MyCoursePageViewModel> {
       body: CustomBody(
         scroller: true,
         padding: const EdgeInsets.symmetric(horizontal: 12),
+        appBarHeight: MyScreenUtil.getInstance().statusBarHeight +
+            AppBarOptions.hight50.height,
         appBar: NormalAppBar(
           title: const Text(
             "我的课表",

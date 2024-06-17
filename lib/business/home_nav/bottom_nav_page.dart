@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 
@@ -116,7 +117,7 @@ class BottomNavPage extends GetView<BottomNavViewModel> {
               alignment: Alignment.bottomCenter,
               child: Container(
                 width: context.width,
-                height: NavigationOptions.hight55.height,
+                height: NavigationOptions.hight55.height.h,
                 color: Colors.white,
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
+import 'package:timestep/utils/my_screen_util.dart';
 
 import 'rountes/app_rountes.dart';
 import 'rountes/app_rountes_listener.dart';
@@ -25,17 +27,27 @@ class WejindaApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GetMaterialApp(
-      // navigatorKey: Toast.navigatorKey, //加上此配置
-      //navigatorObservers: [FlutterSmartDialog.observer],
-      // Dialog 初始化
-      builder: FlutterSmartDialog.init(),
-      initialRoute: PagePathUtil.bottomNavPage,
-      getPages: AppRountes.appRoutes,
-      defaultTransition: Transition.native, // 页面跳转默认动画
-      routingCallback: RoutingListener.routingListner,
-      theme: ThemeData(platform: TargetPlatform.iOS),
-      debugShowCheckedModeBanner: false,
+    return ScreenUtilInit(
+      designSize: const Size(375, 812),
+      minTextAdapt: true,
+      splitScreenMode: true,
+      builder: (context, child) {
+        return GetMaterialApp(
+          // navigatorKey: Toast.navigatorKey, //加上此配置
+          //navigatorObservers: [FlutterSmartDialog.observer],
+          // Dialog 初始化
+          builder: FlutterSmartDialog.init(),
+          initialRoute: PagePathUtil.bottomNavPage,
+          getPages: AppRountes.appRoutes,
+          defaultTransition: Transition.native, // 页面跳转默认动画
+          routingCallback: RoutingListener.routingListner,
+          theme: ThemeData(platform: TargetPlatform.iOS),
+          debugShowCheckedModeBanner: false,
+          onInit: () {
+            MyScreenUtil.getInstance().init(context);
+          },
+        );
+      },
     );
   }
 }

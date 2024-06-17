@@ -16,7 +16,7 @@ class CustomOneEdit extends StatelessWidget {
   final bool moveTextPositionInLast; // 是否移动游标到最后
 
   const CustomOneEdit({
-    Key? key,
+    super.key,
     this.focusNode,
     this.editController,
     this.keyboardType,
@@ -26,7 +26,7 @@ class CustomOneEdit extends StatelessWidget {
     this.onChanged,
     this.onTap,
     this.moveTextPositionInLast = false,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -104,6 +104,8 @@ class CustomOneEdit extends StatelessWidget {
               controller.focusNode?.unfocus();
             },
             decoration: const InputDecoration(
+              isCollapsed: true,
+              isDense: true,
               counterText: '',
               border: InputBorder.none,
               hintStyle: TextStyle(

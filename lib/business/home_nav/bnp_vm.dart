@@ -14,7 +14,6 @@ import '../user/api/user_info_api.dart';
 import '../user/repository/account_data_service.dart';
 import '../../net/net_manager.dart';
 import '../../utils/page_path_util.dart';
-import '../user/account_center/user_page.dart';
 import '../todo/todo_page.dart';
 import '../time_table/course_table/time_table_page.dart';
 import '../user/account_center/user_page_vm.dart';
@@ -37,7 +36,7 @@ class BottomNavViewModel extends GetxController {
   // 底部导航栏 Item
   final bottomNavItems = [
     BottomNavItemVO("课表", AssertUtil.iconCourse, () {}, isSelected: true).obs,
-    BottomNavItemVO("日程", AssertUtil.iconCourse, () {}).obs,
+    BottomNavItemVO("时迹", AssertUtil.iconCourse, () {}).obs,
     BottomNavItemVO("概览", AssertUtil.iconMy, () {}).obs,
   ];
 

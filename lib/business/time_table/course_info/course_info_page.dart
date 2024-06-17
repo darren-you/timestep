@@ -12,6 +12,7 @@ import '../../../components/view/custom_bottom_sheet.dart';
 import '../../../enumm/appbar_enum.dart';
 import '../../../enumm/color_enum.dart';
 import '../../../utils/assert_util.dart';
+import '../../../utils/my_screen_util.dart';
 import 'course_info_page_vm.dart';
 
 class CourseInfoPage extends GetView<CourseInfoPageViewModel> {
@@ -25,6 +26,8 @@ class CourseInfoPage extends GetView<CourseInfoPageViewModel> {
       backgroundColor: MyColors.background.color,
       body: CustomBody(
         padding: const EdgeInsets.symmetric(horizontal: 12),
+        appBarHeight: MyScreenUtil.getInstance().statusBarHeight +
+            AppBarOptions.hight50.height,
         appBar: NormalAppBar(
           title: const Text(
             "课表信息",

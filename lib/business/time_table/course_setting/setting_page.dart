@@ -1,6 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:timestep/enumm/appbar_enum.dart';
+import 'package:timestep/utils/my_screen_util.dart';
 
 import '../../../components/appbar/normal_appbar.dart';
 import '../../../components/view/custom_body.dart';
@@ -21,11 +23,14 @@ class TimeTableSettingPage extends GetView<TimeTableSeetingPageViewModel> {
       backgroundColor: MyColors.background.color,
       body: CustomBody(
         margin: const EdgeInsets.symmetric(horizontal: 12),
+        appBarHeight: MyScreenUtil.getInstance().statusBarHeight +
+            AppBarOptions.hight50.height,
         appBar: const NormalAppBar(
-            title: Text(
-          "课表设置",
-          style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-        )),
+          title: Text(
+            "课表设置",
+            style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+          ),
+        ),
         //appBarHeight: AppBarOptions.hight50.height,
         body: Column(
           children: [

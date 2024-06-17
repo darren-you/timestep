@@ -33,6 +33,9 @@ class AssertUtil {
   static const String invisibleSvg = "images/svg_invisible.svg";
   static const String manSvg = "images/svg_man.svg";
   static const String womanSvg = "images/svg_woman.svg";
+  static const String iconInvisible = "images/icon_invisible.svg";
+  static const String iconVisible = "images/icon_visible.svg";
+  static const String iconClose = "images/icon_close.svg";
 
   // jpeg
   static const String userBg = "images/user_bg.jpg";

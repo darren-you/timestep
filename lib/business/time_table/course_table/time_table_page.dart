@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 
 import '../../../components/container/custom_icon_button.dart';
@@ -47,7 +48,7 @@ class TimeTablePages extends GetView<TimeTableViewModel> {
                 children: [
                   //日期、第几周、菜单按钮
                   SizedBox(
-                    height: 50,
+                    height: 50.h,
                     child: Stack(
                       alignment: Alignment.center,
                       children: [
@@ -149,7 +150,7 @@ class TimeTablePages extends GetView<TimeTableViewModel> {
                     () => AnimatedContainer(
                       duration: const Duration(milliseconds: 360),
                       curve: Curves.easeInOut,
-                      height: controller.isExpanded.value ? 50 : 0,
+                      height: controller.isExpanded.value ? 50.h : 0,
                       child: ListView.builder(
                         scrollDirection: Axis.horizontal,
                         controller: controller.courseWeekListController,
@@ -167,7 +168,8 @@ class TimeTablePages extends GetView<TimeTableViewModel> {
                                 margin: const EdgeInsets.only(
                                     left: 4, top: 0, right: 4, bottom: 8),
                                 // 一行显示 7 个周Item
-                                width: context.width / 7 - 8,
+                                //width: context.width / 7 - 8,
+                                width: 42.h,
                                 decoration: BoxDecoration(
                                   color: (index + 1) ==
                                           controller.currentWeekIndex.value
@@ -195,13 +197,13 @@ class TimeTablePages extends GetView<TimeTableViewModel> {
                   // 周标题栏
                   Container(
                     color: MyColors.background.color,
-                    height: 26,
+                    height: 26.h,
                     child: Row(
                       children: [
                         // 月
                         Container(
                           alignment: Alignment.center,
-                          width: 36,
+                          width: 36.w,
                           child: const Text("月"),
                         ),
                         // 一、二、三、四、五、六、日
@@ -256,8 +258,8 @@ class TimeTablePages extends GetView<TimeTableViewModel> {
                         children: [
                           Container(
                             alignment: Alignment.bottomCenter,
-                            height: 140,
-                            width: 140,
+                            height: 140.w,
+                            width: 140.w,
                             decoration: const BoxDecoration(
                               image: DecorationImage(
                                 fit: BoxFit.cover,
@@ -279,8 +281,9 @@ class TimeTablePages extends GetView<TimeTableViewModel> {
 
             // 底部导航行高度
             Padding(
-                padding:
-                    EdgeInsets.only(bottom: NavigationOptions.hight55.height)),
+              padding:
+                  EdgeInsets.only(bottom: NavigationOptions.hight55.height.h),
+            ),
           ],
         ),
       ),

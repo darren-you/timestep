@@ -4,18 +4,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 
-import '../../enumm/appbar_enum.dart';
-import '../../enumm/nav_enum.dart';
 import '../../enumm/color_enum.dart';
 
 final GlobalKey appBarKey = GlobalKey();
 
 class CustomBody extends StatelessWidget {
   final Widget? appBar;
-  //final List<Widget> body;
+  final double? appBarHeight;
+  final double? appNavHeight;
   final Widget? body;
-  final bool enableAppBarPadding;
-  final bool enableNaviBottom;
+  final bool? enableAppBarPadding;
+  final bool? enableNaviBottom;
   final EdgeInsetsGeometry? padding;
   final EdgeInsetsGeometry? margin;
   final bool scroller; // 根据此属性，让body为ListView还是Column
@@ -31,6 +30,8 @@ class CustomBody extends StatelessWidget {
     this.margin,
     this.scroller = true,
     this.backgroundColor,
+    this.appBarHeight = 0,
+    this.appNavHeight = 0,
   });
 
   @override
@@ -45,15 +46,11 @@ class CustomBody extends StatelessWidget {
       ));
     }
 
-    final statusHeight = context.mediaQueryPadding.top;
-    final appBarHeight = AppBarOptions.hight50.height;
-
     final navHeight = context.mediaQueryPadding.bottom;
-    final appNavHeight = NavigationOptions.hight55.height;
     double bottomPadding = 0.0;
-    if (enableNaviBottom && Platform.isAndroid) {
-      bottomPadding = appNavHeight + navHeight;
-    } else if (!enableNaviBottom && Platform.isAndroid) {
+    if (enableNaviBottom! && Platform.isAndroid) {
+      bottomPadding = appNavHeight! + navHeight;
+    } else if (enableNaviBottom! && Platform.isAndroid) {
       bottomPadding = navHeight;
     } else if (Platform.isIOS) {
       bottomPadding = 0.0;
@@ -66,7 +63,7 @@ class CustomBody extends StatelessWidget {
         children: [
           Container(
             padding: EdgeInsets.only(
-              top: enableAppBarPadding ? (appBarHeight + statusHeight) : 0,
+              top: enableAppBarPadding! ? appBarHeight! : 0,
               bottom: bottomPadding,
             ),
             color: backgroundColor ?? MyColors.background.color,
@@ -79,11 +76,16 @@ class CustomBody extends StatelessWidget {
                 height: context.height,
                 padding: padding,
                 margin: margin,
-                child: SingleChildScrollView(
-                  physics:
-                      scroller ? const AlwaysScrollableScrollPhysics() : null,
-                  child: body,
-                ),
+                // child: SingleChildScrollView(
+                //   physics:
+                //       scroller ? const AlwaysScrollableScrollPhysics() : null,
+                //   child: body,
+                // ),
+                child: scroller
+                    ? SingleChildScrollView(
+                        physics: const AlwaysScrollableScrollPhysics(),
+                        child: body)
+                    : body,
               ),
             ),
           ),
