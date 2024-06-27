@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
+import 'package:timestep/business/todo/todo_page_controller.dart';
 import 'package:timestep/components/container/custom_container.dart';
-import 'package:timestep/components/notification/custom_notification.dart';
+import 'package:timestep/services/app_init_service.dart';
 
-import '../../components/container/custom_icon_button.dart';
 import '../../enumm/color_enum.dart';
 import '../../enumm/nav_enum.dart';
 import '../../utils/assert_util.dart';
-import 'todo_page_vm.dart';
 
-class TodoPage extends GetView<TodoPageViewModel> {
+class TodoPage extends GetView<TodoPageController> {
   const TodoPage({super.key});
 
   @override
@@ -30,83 +30,13 @@ class TodoPage extends GetView<TodoPageViewModel> {
               color: Colors.white,
               child: Column(
                 children: [
-                  //日期、第几周、菜单按钮
-                  SizedBox(
-                    height: 50,
-                    child: Stack(
-                      alignment: Alignment.center,
-                      children: [
-                        // 课表名称
-                        Positioned(
-                          left: 32,
-                          child: CustomContainer(
-                            borderRadius: BorderRadius.circular(25),
-                            scaleValue: 0.9,
-                            duration: const Duration(milliseconds: 200),
-                            child: Container(
-                              width: 34,
-                              height: 34,
-                              padding: const EdgeInsets.all(10),
-                              decoration: BoxDecoration(
-                                //color: MyColors.background.color,
-                                borderRadius: BorderRadius.circular(25),
-                              ),
-                              child: Transform.rotate(
-                                angle: -600.0,
-                                child: SvgPicture.asset(AssertUtil.iconGo),
-                              ),
-                            ),
-                          ),
-                        ),
-
-                        // 标题周信息
-                        Align(
-                          alignment: Alignment.center,
-                          child: // 居中标题第几周
-                              GestureDetector(
-                            onTap: () {
-                              // 展开周预览图菜单
-                            },
-                            onDoubleTap: () {},
-                            child: Container(
-                              //color: Colors.amber,
-                              width: 100,
-                              height: 50,
-                              child: const Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [Text("2024年4月7日")],
-                              ),
-                            ),
-                          ),
-                        ),
-
-                        // 菜单按钮
-                        Positioned(
-                          right: 32,
-                          child: CustomContainer(
-                            borderRadius: BorderRadius.circular(25),
-                            scaleValue: 0.9,
-                            duration: const Duration(milliseconds: 200),
-                            child: Container(
-                              width: 34,
-                              height: 34,
-                              padding: const EdgeInsets.all(10),
-                              decoration: BoxDecoration(
-                                //color: MyColors.background.color,
-                                borderRadius: BorderRadius.circular(25),
-                              ),
-                              child: SvgPicture.asset(AssertUtil.iconGo),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ), // 周标题栏
+                  _dateInfoWidget(controller),
+                  _invisibleDateTimeWidget(controller),
                 ],
               ),
             ),
 
-            // 课表内容
+            // Todo内容
             Expanded(
               child: PageView.builder(
                 itemCount: 5,
@@ -125,6 +55,146 @@ class TodoPage extends GetView<TodoPageViewModel> {
                 padding:
                     EdgeInsets.only(bottom: NavigationOptions.hight55.height)),
           ],
+        ),
+      ),
+    );
+  }
+
+  /// 日期、第几周、菜单按钮
+  Widget _dateInfoWidget(TodoPageController controller) {
+    return SizedBox(
+      height: 50,
+      child: Stack(
+        alignment: Alignment.center,
+        children: [
+          // 课表名称
+          Positioned(
+            left: 32,
+            child: CustomContainer(
+              borderRadius: BorderRadius.circular(25),
+              scaleValue: 0.9,
+              duration: const Duration(milliseconds: 200),
+              child: Container(
+                width: 34,
+                height: 34,
+                padding: const EdgeInsets.all(10),
+                decoration: BoxDecoration(
+                  //color: MyColors.background.color,
+                  borderRadius: BorderRadius.circular(25),
+                ),
+                child: Transform.rotate(
+                  angle: -600.0,
+                  child: SvgPicture.asset(AssertUtil.iconGo),
+                ),
+              ),
+            ),
+          ),
+
+          // 标题周信息
+          Align(
+            alignment: Alignment.center,
+            child: // 居中标题第几周
+                GestureDetector(
+              onTap: () {
+                // 展开月预览图菜单
+                controller.tapDateTextInfo();
+              },
+              onDoubleTap: () {},
+              child: Container(
+                //color: Colors.amber,
+                alignment: Alignment.center,
+                width: 100,
+                height: 50,
+                child: Text(controller.monthDayText.value),
+              ),
+            ),
+          ),
+
+          // 菜单按钮
+          Positioned(
+            right: 32,
+            child: CustomContainer(
+              borderRadius: BorderRadius.circular(25),
+              scaleValue: 0.9,
+              duration: const Duration(milliseconds: 200),
+              child: Container(
+                width: 34,
+                height: 34,
+                padding: const EdgeInsets.all(10),
+                decoration: BoxDecoration(
+                  //color: MyColors.background.color,
+                  borderRadius: BorderRadius.circular(25),
+                ),
+                child: SvgPicture.asset(AssertUtil.iconGo),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  /// 课表预览周item中Text颜色
+  Color _dayItemTextColor(DateTime dayDateTime) {
+    Color color = MyColors.textMain.color;
+
+    if (dayDateTime == controller.currentDayDateTime.value) {
+      color = MyColors.textWhite.color;
+    } else if (dayDateTime.isBefore(controller.currentDayDateTime.value)) {
+      color = MyColors.cardGrey2.color;
+    }
+
+    return color;
+  }
+
+  /// 隐藏日期Scroller
+  Widget _invisibleDateTimeWidget(TodoPageController controller) {
+    return Obx(
+      () => AnimatedContainer(
+        duration: const Duration(milliseconds: 360),
+        curve: Curves.easeInOut,
+        height: controller.isExpanded.value ? 50.h : 0,
+        child: ListView.builder(
+          scrollDirection: Axis.horizontal,
+          controller: controller.dateTimeScrollController,
+          itemCount: controller.daysInMonthList.value.length,
+          itemBuilder: (context, index) {
+            logger.d(
+                'datetimeNow: ${controller.currentDayDateTime.value} $index datetime: ${controller.daysInMonthList.value[index]}');
+            return GestureDetector(
+              onTap: () {
+                //controller.tapCourseWeek(index);
+              },
+              child: Obx(
+                () => Container(
+                  // margin: const EdgeInsets.symmetric(
+                  //     horizontal: 4, vertical: 2),
+                  margin: const EdgeInsets.only(
+                      left: 4, top: 0, right: 4, bottom: 8),
+                  // 一行显示 7 个周Item
+                  //width: context.width / 7 - 8,
+                  width: 42.h,
+                  decoration: BoxDecoration(
+                    color: controller.daysInMonthList.value[index] ==
+                            controller.currentDayDateTime.value
+                        ? MyColors.cardGreen.color
+                        : MyColors.cardGrey1.color,
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  child: Center(
+                    child: Text(
+                      (index + 1).toString(),
+                      style: TextStyle(
+                        color: _dayItemTextColor(
+                            controller.daysInMonthList.value[index]),
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            );
+          },
         ),
       ),
     );

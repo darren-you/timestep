@@ -1,5 +1,5 @@
 import 'package:get/get.dart';
-import 'package:timestep/business/todo/todo_page_vm.dart';
+import 'package:timestep/business/todo/todo_page_controller.dart';
 
 import '../business/app/about_app/about_wejinda_page.dart';
 import '../business/app/about_app/about_wejinda_page_vm.dart';
@@ -38,11 +38,6 @@ class AppRountes {
       binding: BindingsBuilder(
         () {
           Get.lazyPut(() => BottomNavViewModel());
-          Get.lazyPut(() => TimeTableViewModel());
-          Get.lazyPut<CourseDataService>(() => CourseDataImpl());
-          Get.lazyPut<AccountDataService>(() => AccountDataImpl());
-          Get.lazyPut(() => TodoPageViewModel());
-          Get.lazyPut(() => UserPageViewModel());
         },
       ),
     ),

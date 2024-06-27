@@ -11,7 +11,7 @@ import '../../../utils/assert_util.dart';
 import '../../../utils/page_path_util.dart';
 import 'timetable_vm.dart';
 
-// 课表预览周item中Text颜色
+/// 课表预览周item中Text颜色
 Color courseItemTextColor(int index, int currentWeekIndex) {
   final vm = Get.find<TimeTableViewModel>();
 
