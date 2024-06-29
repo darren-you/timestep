@@ -25,10 +25,10 @@ class DateUtil {
   static List<int> getYMdays({required int year, required int month}) {
     List<int> days = [];
 
-    int daysInMonth = DateTime.utc(year, month + 1, 0, 0, 0).day;
+    int daysInMonth = DateTime(year, month + 1, 0).day;
 
     for (int i = 1; i <= daysInMonth; i++) {
-      DateTime date = DateTime.utc(year, month, i, 0, 0, 0).toLocal();
+      DateTime date = DateTime(year, month, i, 0).toLocal();
 
       days.add(date.day);
     }
@@ -40,16 +40,24 @@ class DateUtil {
   static List<DateTime> getDaysInMonth(DateTime dateTime) {
     final year = dateTime.year;
     final month = dateTime.month;
-    final lastDayOfMonth = DateTime(year, month + 1).day;
+    final lastDayOfMonth = DateTime(year, month + 1, 0).day;
 
     List<DateTime> days = [];
     for (int i = 1; i <= lastDayOfMonth; i++) {
       // 创建一个表示午夜的DateTime对象
-      final dayDateTime = DateTime.utc(year, month, i);
-      days.add(dayDateTime.toLocal());
+      final dayDateTime = DateTime(year, month, i);
+      days.add(dayDateTime);
     }
 
     return days;
+  }
+
+  /// 获取传入的DateTime所在月份有多少天
+  static int getDaysInMonthByDateTime(DateTime dateTime) {
+    final year = dateTime.year;
+    final month = dateTime.month;
+    final lastDayOfMonth = DateTime(year, month + 1, 0).day;
+    return lastDayOfMonth;
   }
 
   /// 根据DateTime返回AM或者PM
@@ -83,5 +91,43 @@ class DateUtil {
   /// 计算DateTime1收否在DateTime2之前
   static bool isBefore(DateTime dateTime1, DateTime dateTime2) {
     return dateTime1.isBefore(dateTime2);
+  }
+
+  /// 比较DateTime1、DateTime2是否同年同一天
+  static bool isSameDay(DateTime dateTime1, DateTime dateTime2) {
+    return dateTime1.year == dateTime2.year &&
+        dateTime1.month == dateTime2.month &&
+        dateTime1.day == dateTime2.day;
+  }
+
+  /// 比较传入DateTime是否为同年、同月
+  static bool isSameYearAndMonth(DateTime dateTime) {
+    final nowDateTime = DateTime.now();
+    return dateTime.year == nowDateTime.year &&
+        dateTime.month == nowDateTime.month;
+  }
+
+  /// 返回传入DateTime的前一个月1号时间
+  static DateTime getPreviousMonth(DateTime dateTime) {
+    final year = dateTime.year;
+    final month = dateTime.month;
+
+    if (month == 1) {
+      return DateTime(year - 1, 12, 1);
+    } else {
+      return DateTime(year, month - 1, 1);
+    }
+  }
+
+  /// 返回传入DateTime的后一个月1号时间
+  static DateTime getAfterMonth(DateTime dateTime) {
+    final year = dateTime.year;
+    final month = dateTime.month;
+
+    if (month == 12) {
+      return DateTime(year + 1, 1, 1);
+    } else {
+      return DateTime(year, month + 1, 1);
+    }
   }
 }

@@ -165,8 +165,16 @@ class TimeTablePages extends GetView<TimeTableViewModel> {
                               () => Container(
                                 // margin: const EdgeInsets.symmetric(
                                 //     horizontal: 4, vertical: 2),
-                                margin: const EdgeInsets.only(
-                                    left: 4, top: 0, right: 4, bottom: 8),
+                                margin: EdgeInsets.only(
+                                    left: index == 0 ? 8 : 4,
+                                    top: 0,
+                                    right: index ==
+                                            controller.courseModel.value
+                                                    .courseAllPages.length -
+                                                1
+                                        ? 8
+                                        : 4,
+                                    bottom: 8),
                                 // 一行显示 7 个周Item
                                 //width: context.width / 7 - 8,
                                 width: 42.h,
