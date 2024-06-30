@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 
 import '../../../components/container/custom_icon_button.dart';
@@ -95,7 +96,7 @@ class TimeTablePages extends GetView<TimeTableViewModel> {
                               controller.toNowWeekPage();
                             },
                             child: Container(
-                              //color: Colors.amber,
+                              color: Colors.transparent,
                               width: 100,
                               height: 50,
                               child: Row(
@@ -121,6 +122,19 @@ class TimeTablePages extends GetView<TimeTableViewModel> {
                                   const Text(
                                     ' 周',
                                     style: TextStyle(fontSize: 15),
+                                  ),
+                                  SizedBox(width: 4.w),
+                                  Obx(
+                                    () => controller.isExpanded.value
+                                        ? SvgPicture.asset(AssertUtil.iconTag)
+                                        : Transform(
+                                            transform: Matrix4.rotationZ(
+                                                3.14159265358979323846), // π 弧度
+                                            alignment:
+                                                Alignment.center, // 确保旋转点在中心
+                                            child: SvgPicture.asset(
+                                                AssertUtil.iconTag),
+                                          ),
                                   ),
                                 ],
                               ),

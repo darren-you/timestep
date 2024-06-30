@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="16px" height="16px" viewBox="0 0 16 16" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>编组</title>
+    <g id="主页" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="主页-课表" transform="translate(-211, -17)">
+            <g id="编组" transform="translate(211, 17)">
+                <circle id="椭圆形" fill="#D8D8D8" cx="8" cy="8" r="8"></circle>
+                <g id="下箭头" transform="translate(2, 4)" fill="#FFFFFF" fill-rule="nonzero">
+                    <rect id="矩形" opacity="0" x="0" y="0" width="12" height="12"></rect>
+                    <path d="M6.79151853,7.67547228 L10.7957938,3.32634092 C11.0256416,3.07667775 11.0646821,2.74052963 10.8965154,2.45910312 C10.7283488,2.17767661 10.3821074,1.99972479 10.0032378,2 L1.99593205,2 C1.617212,2 1.27125936,2.17803831 1.10330053,2.45941163 C0.935341697,2.74078495 0.974449082,3.07677631 1.20420591,3.32634092 L5.2084812,7.67547228 C5.39688044,7.87999867 5.68956204,8 6,8 C6.31043769,8 6.60311928,7.87999867 6.79151853,7.67547228 L6.79151853,7.67547228 Z" id="路径"></path>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

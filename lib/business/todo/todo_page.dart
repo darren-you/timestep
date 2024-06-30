@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:timestep/business/todo/todo_page_controller.dart';
 import 'package:timestep/services/app_init_service.dart';
@@ -95,11 +96,27 @@ class TodoPage extends GetView<TodoPageController> {
                 controller.doubleTapDateTextInfo();
               },
               child: Container(
-                //color: Colors.amber,
+                color: Colors.transparent,
                 alignment: Alignment.center,
                 width: 100,
                 height: 50,
-                child: Obx(() => Text(controller.yearMonthText.value)),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Obx(() => Text(controller.yearMonthText.value)),
+                    SizedBox(width: 4.w),
+                    Obx(
+                      () => controller.isExpanded.value
+                          ? SvgPicture.asset(AssertUtil.iconTag)
+                          : Transform(
+                              transform: Matrix4.rotationZ(
+                                  3.14159265358979323846), // π 弧度
+                              alignment: Alignment.center, // 确保旋转点在中心
+                              child: SvgPicture.asset(AssertUtil.iconTag),
+                            ),
+                    ),
+                  ],
+                ),
               ),
             ),
           ),
