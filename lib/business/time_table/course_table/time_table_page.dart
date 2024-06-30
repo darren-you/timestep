@@ -4,6 +4,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 
 import '../../../components/container/custom_icon_button.dart';
+import '../../../enumm/appbar_enum.dart';
 import '../../../enumm/color_enum.dart';
 import '../../../enumm/nav_enum.dart';
 import 'components/course_week.dart';
@@ -55,7 +56,7 @@ class TimeTablePages extends GetView<TimeTableViewModel> {
                       children: [
                         // 课表名称
                         Positioned(
-                          left: 10,
+                          left: 16.w,
                           child: GestureDetector(
                             onDoubleTap: () {
                               if (controller.changeCourseSate.value ==
@@ -63,9 +64,9 @@ class TimeTablePages extends GetView<TimeTableViewModel> {
                                 controller.changeCourse(animate: true);
                               }
                             },
-                            child: SizedBox(
-                              height: 50,
-                              width: 65,
+                            child: Container(
+                              color: Colors.transparent,
+                              height: 50.h,
                               child: Center(
                                 child: Obx(
                                   () => Text(
@@ -74,7 +75,7 @@ class TimeTablePages extends GetView<TimeTableViewModel> {
                                     overflow: TextOverflow.ellipsis,
                                     style: TextStyle(
                                       color: MyColors.textMain.color,
-                                      fontSize: 15,
+                                      fontSize: 15.sp,
                                     ),
                                   ),
                                 ),
@@ -84,60 +85,52 @@ class TimeTablePages extends GetView<TimeTableViewModel> {
                         ),
 
                         // 标题周信息
-                        Align(
-                          alignment: Alignment.center,
-                          child: // 居中标题第几周
-                              GestureDetector(
-                            onTap: () {
-                              // 展开周预览图菜单
-                              controller.openMoreInfo();
-                            },
-                            onDoubleTap: () {
-                              controller.toNowWeekPage();
-                            },
-                            child: Container(
-                              color: Colors.transparent,
-                              width: 100,
-                              height: 50,
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  const Text(
-                                    '第 ',
-                                    style: TextStyle(fontSize: 15),
-                                  ),
-                                  Obx(() => Text(
-                                        controller.currentWeekIndex.value
-                                            .toString(),
-                                        style: TextStyle(
-                                          fontSize: 15,
-                                          fontWeight: FontWeight.bold,
-                                          color: controller
-                                                      .currentWeekIndex.value ==
-                                                  controller.nowWeek
-                                              ? Colors.red
-                                              : MyColors.iconGrey1.color,
-                                        ),
-                                      )),
-                                  const Text(
-                                    ' 周',
-                                    style: TextStyle(fontSize: 15),
-                                  ),
-                                  SizedBox(width: 4.w),
-                                  Obx(
-                                    () => controller.isExpanded.value
-                                        ? SvgPicture.asset(AssertUtil.iconTag)
-                                        : Transform(
-                                            transform: Matrix4.rotationZ(
-                                                3.14159265358979323846), // π 弧度
-                                            alignment:
-                                                Alignment.center, // 确保旋转点在中心
-                                            child: SvgPicture.asset(
-                                                AssertUtil.iconTag),
+                        Positioned(
+                          left: 0,
+                          right: 0,
+                          child: GestureDetector(
+                            onTap: controller.openMoreInfo,
+                            onDoubleTap: controller.toNowWeekPage,
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                SizedBox(width: 20.w),
+                                Text('第 ', style: TextStyle(fontSize: 15.sp)),
+                                Obx(() => Text(
+                                      controller.currentWeekIndex.value
+                                          .toString(),
+                                      style: TextStyle(
+                                        fontSize: 15.sp,
+                                        fontWeight: FontWeight.bold,
+                                        color:
+                                            controller.currentWeekIndex.value ==
+                                                    controller.nowWeek
+                                                ? Colors.red
+                                                : MyColors.iconGrey1.color,
+                                      ),
+                                    )),
+                                Text(' 周', style: TextStyle(fontSize: 15.sp)),
+                                SizedBox(width: 4.w),
+                                Obx(
+                                  () => controller.isExpanded.value
+                                      ? SvgPicture.asset(
+                                          AssertUtil.iconTag,
+                                          width: 16.w,
+                                          height: 16.w,
+                                        )
+                                      : Transform(
+                                          transform: Matrix4.rotationZ(
+                                              3.14159265358979323846), // π 弧度
+                                          alignment:
+                                              Alignment.center, // 确保旋转点在中心
+                                          child: SvgPicture.asset(
+                                            AssertUtil.iconTag,
+                                            width: 16.w,
+                                            height: 16.w,
                                           ),
-                                  ),
-                                ],
-                              ),
+                                        ),
+                                ),
+                              ],
                             ),
                           ),
                         ),
@@ -147,12 +140,12 @@ class TimeTablePages extends GetView<TimeTableViewModel> {
                           right: 0,
                           child: CustomIconButton(
                             AssertUtil.iconMenu,
-                            //background: Colors.blue,
+                            backgroundHeight: AppBarOptions.hight50.height,
+                            backgroundWidth: AppBarOptions.hight50.height,
                             alignment: Alignment.centerRight,
-                            padding: const EdgeInsets.only(right: 16),
-                            onTap: () {
-                              Get.toNamed(PagePathUtil.timeTableSettingPage);
-                            },
+                            padding: EdgeInsets.only(right: 16.w),
+                            onTap: () =>
+                                Get.toNamed(PagePathUtil.timeTableSettingPage),
                           ),
                         ),
                       ],
@@ -178,22 +171,22 @@ class TimeTablePages extends GetView<TimeTableViewModel> {
                             child: Obx(
                               () => Container(
                                 margin: EdgeInsets.only(
-                                    left: index == 0 ? 8 : 4,
+                                    left: index == 0 ? 8.w : 4.w,
                                     top: 0,
                                     right: index ==
                                             controller.courseModel.value
                                                     .courseAllPages.length -
                                                 1
-                                        ? 8
-                                        : 4,
-                                    bottom: 8),
+                                        ? 8.w
+                                        : 4.w,
+                                    bottom: 8.w),
                                 width: 42.h,
                                 decoration: BoxDecoration(
                                   color: (index + 1) ==
                                           controller.currentWeekIndex.value
                                       ? MyColors.cardGreen.color
                                       : MyColors.cardGrey1.color,
-                                  borderRadius: BorderRadius.circular(10),
+                                  borderRadius: BorderRadius.circular(10.r),
                                 ),
                                 child: Center(
                                   child: Text(
@@ -212,6 +205,7 @@ class TimeTablePages extends GetView<TimeTableViewModel> {
                       ),
                     ),
                   ),
+
                   // 周标题栏
                   Container(
                     color: MyColors.background.color,
@@ -251,7 +245,6 @@ class TimeTablePages extends GetView<TimeTableViewModel> {
             // 课表内容
             Obx(() {
               debugPrint("绘制课程周视图Pages");
-
               return controller.courseModel.value.courseAllPages.isNotEmpty
                   ? Expanded(
                       child: PageView.builder(
@@ -285,7 +278,7 @@ class TimeTablePages extends GetView<TimeTableViewModel> {
                               ),
                             ),
                           ),
-                          const Padding(padding: EdgeInsets.only(top: 12)),
+                          Padding(padding: EdgeInsets.only(top: 12.h)),
                           const Center(
                             child: Text(
                               "暂无课表数据",

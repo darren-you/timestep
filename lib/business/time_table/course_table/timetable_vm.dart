@@ -236,18 +236,18 @@ class TimeTableViewModel extends GetxController {
     var offset = 0.0;
     final screenWidth = MyScreenUtil.getInstance().screenWidth;
     final halfScreenWidth = screenWidth / 2;
-    final halfScreenItem = (halfScreenWidth / (42.h + 8)).ceil();
+    final halfScreenItem = (halfScreenWidth / (42.h + 8.w)).ceil();
     // 选中week
     final selectedWeek = currentWeekIndex.value;
     // 选课表共有多少周
     final allWeeks = courseModel.value.courseAllPages.length;
     if (selectedWeek > halfScreenItem &&
         selectedWeek <= (allWeeks - halfScreenItem)) {
-      offset = selectedWeek * (42.h + 8) - (42.h / 2) - halfScreenWidth;
+      offset = selectedWeek * (42.h + 8.w) - (42.h / 2) - halfScreenWidth;
     } else if (selectedWeek <= halfScreenItem) {
       offset = 0;
     } else {
-      offset = allWeeks * (42.h + 8) + 8 - screenWidth;
+      offset = allWeeks * (42.h + 8.w) + 8.w - screenWidth;
     }
 
     return offset;

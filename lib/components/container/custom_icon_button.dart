@@ -21,7 +21,7 @@ class CustomIconButton extends StatelessWidget {
 
   const CustomIconButton(
     this.assetName, {
-    Key? key,
+    super.key,
     this.onTap,
     this.defaultColor = Colors.black,
     this.pressedColor = Colors.grey,
@@ -32,7 +32,7 @@ class CustomIconButton extends StatelessWidget {
     this.margin,
     this.backgroundWidth,
     this.backgroundHeight,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

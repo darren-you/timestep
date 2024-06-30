@@ -27,7 +27,7 @@ Widget navItem(Rx<BottomNavItemVO> item) {
         }
       },
       child: Container(
-        padding: const EdgeInsets.symmetric(vertical: 4),
+        padding: EdgeInsets.symmetric(vertical: 4.h),
         color: Colors.transparent,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -35,8 +35,8 @@ Widget navItem(Rx<BottomNavItemVO> item) {
             Obx(
               () => SvgPicture.asset(
                 item.value.assertIcon,
-                width: 30,
-                height: 30,
+                width: 28.h,
+                height: 28.h,
                 colorFilter: item.value.isSelected
                     ? ColorFilter.mode(MyColors.iconBlue.color, BlendMode.srcIn)
                     : null,
@@ -48,7 +48,7 @@ Widget navItem(Rx<BottomNavItemVO> item) {
                       color: item.value.isSelected
                           ? MyColors.iconBlue.color
                           : MyColors.iconGrey1.color,
-                      fontSize: 12),
+                      fontSize: 11.sp),
                 )),
           ],
         ),

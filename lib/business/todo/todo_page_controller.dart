@@ -98,7 +98,7 @@ class TodoPageController extends GetxController {
     var offset = 0.0;
     final screenWidth = MyScreenUtil.getInstance().screenWidth;
     final halfScreenWidth = screenWidth / 2;
-    final halfScreenItem = (halfScreenWidth / (42.h + 8)).ceil();
+    final halfScreenItem = (halfScreenWidth / (42.h + 8.w)).ceil();
     // 选中day
     final selectedDay = currentDayDateTime.value.day;
     // 选中月有多少天
@@ -106,11 +106,11 @@ class TodoPageController extends GetxController {
         DateUtil.getDaysInMonthByDateTime(currentMonthDateTime.value);
     if (selectedDay > halfScreenItem &&
         selectedDay <= (daysInMonth - halfScreenItem)) {
-      offset = selectedDay * (42.h + 8) - (42.h / 2) - halfScreenWidth;
+      offset = selectedDay * (42.h + 8.w) - (42.h / 2) - halfScreenWidth;
     } else if (selectedDay <= halfScreenItem) {
       offset = 0;
     } else {
-      offset = daysInMonth * (42.h + 8) + 8 - screenWidth;
+      offset = daysInMonth * (42.h + 8.w) + 8.w - screenWidth;
     }
 
     return offset;
