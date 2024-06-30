@@ -1,8 +1,11 @@
 import 'package:flutter/widgets.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:date_format/date_format.dart';
+import 'package:timestep/services/app_init_service.dart';
 
 import '../../../enumm/course_enum.dart';
+import '../../../utils/my_screen_util.dart';
 import '../model/course_model.dart';
 import '../my_course/model/course_info.dart';
 import '../repository/course_data_service.dart';
@@ -29,7 +32,7 @@ class TimeTableViewModel extends GetxController {
   var courseModel = CourseModel.empty().obs;
   var isExpanded = false.obs;
 
-  //初始化课表数据
+  /// 初始化课表数据
   CourseModel initCourseModel(
       List<List<List<CourseInfo>>> courseData,
       String name,
@@ -59,7 +62,7 @@ class TimeTableViewModel extends GetxController {
     return courseModel;
   }
 
-  // 计算学期课程截止周
+  /// 计算学期课程截止周
   int _getMaxWeek(List<List<List<CourseInfo?>>> data) {
     var maxWeek = 0;
     // 遍历所有课程计算最大周
@@ -78,7 +81,7 @@ class TimeTableViewModel extends GetxController {
     return maxWeek;
   }
 
-  // 设置课程Item颜色
+  /// 设置课程Item颜色
   Map<String, String> _setItemColor(List<List<List<CourseInfo?>>> courseData,
       CourseItemColorEnum courseColor) {
     Map<String, String> colorMap = {};
@@ -101,7 +104,7 @@ class TimeTableViewModel extends GetxController {
     return colorMap;
   }
 
-  // 计算所有周的课程数据
+  /// 计算所有周的课程数据
   List<OneWeekModel> _allCourseWeek(
       int maxWeek,
       DateTime realyTermStartTime,
@@ -164,7 +167,7 @@ class TimeTableViewModel extends GetxController {
     return allWeekModelList;
   }
 
-  // 计算当前时间属于第几周
+  /// 计算当前时间属于第几周
   int _nowWeek(CourseModel courseModel) {
     //计算当前时间，属于第几周 -> 当前时间 - 开始时间） ～/ 7 + 1
     return DateTime.now().difference(courseModel.realyTermStartTime).inDays ~/
@@ -172,12 +175,12 @@ class TimeTableViewModel extends GetxController {
         1;
   }
 
-  // 计算当前日期是否显示色块
+  /// 计算当前日期是否显示色块
   bool showColor(int pageIndex, int dayIndex) {
     return (nowWeek == pageIndex + 1 && dayIndex + 1 == DateTime.now().weekday);
   }
 
-  // 初始化界面显示所需数据
+  /// 初始化界面显示所需数据
   void initPageState() {
     debugPrint("初始化页面数据 状态");
     // 读取本地课程第 [0] 个课程表
@@ -190,7 +193,7 @@ class TimeTableViewModel extends GetxController {
     }
   }
 
-  //event: 点击当前时间Widget -> 跳转到对应周
+  /// event: 点击当前时间Widget -> 跳转到对应周
   toNowWeekPage({bool animate = true}) {
     if (courseModel.value.courseAllPages.isNotEmpty) {
       if (animate) {
@@ -207,61 +210,50 @@ class TimeTableViewModel extends GetxController {
     }
   }
 
-  //event: 滑动page -> 更新state: currentWeek当前周
-  changePage(int index) {
-    currentWeekIndex.value = index + 1;
-
-    debugPrint("pager滑动前:    -> $tapCourseItem  当前page:   -> $index");
-
-    // if (tapCourseItem) {
-    //   debugPrint("需要滚动✅");
-    //   if (index >= 3 && courseModel.value.courseAllPages.length - index > 3) {
-    //     courseWeekListController.animateTo((index - 3) * (Get.width / 7),
-    //         duration: const Duration(milliseconds: 1800),
-    //         curve: Curves.fastLinearToSlowEaseIn);
-    //   }
-    // }
-
-    if (tapCourseItem) {
-      if (index < 3) {
-        // 位于前3周， 则滚动偏移量为0
-        debugPrint("位于前3周");
-        courseWeekListController.animateTo(0.0,
-            duration: const Duration(milliseconds: 1800),
-            curve: Curves.fastLinearToSlowEaseIn);
-      } else if (index >= 3 &&
-          courseModel.value.courseAllPages.length - index > 3) {
-        debugPrint("位于 前3周 < ... > 后3周 之间");
-
-        // 每行显示7个周 Item
-        courseWeekListController.animateTo((index - 3) * (Get.width / 7),
-            duration: const Duration(milliseconds: 1800),
-            curve: Curves.fastLinearToSlowEaseIn);
-      } else {
-        // 位于后三周
-        debugPrint("位于后3周");
-        /*
-        ( (length ~/ 7)  - 1 ) * 7 + (length % 7)
-       */
-        final courseLength = courseModel.value.courseAllPages.length;
-        courseWeekListController.animateTo(
-            (((courseLength ~/ oneWeekDay) - 1) * oneWeekDay +
-                    (courseLength % oneWeekDay)) *
-                (Get.width / oneWeekDay),
-            duration: const Duration(milliseconds: 1800),
-            curve: Curves.fastLinearToSlowEaseIn);
-      }
+  /// 自动滚动周List
+  void _autoScrollerWeekList({required bool useAnimation}) {
+    final offset = _getOffsetByCurrentWeek();
+    if (useAnimation) {
+      courseWeekListController.animateTo(offset,
+          duration: const Duration(milliseconds: 1800),
+          curve: Curves.fastLinearToSlowEaseIn);
+    } else {
+      courseWeekListController.jumpTo(offset);
     }
-
-    // 当pager滑动到与点击选择周Index相同时，标记为点击状态
-    if (tapCourseItem == false && index == tapCourseIndex) {
-      tapCourseItem = true;
-    }
-
-    debugPrint("pager滑动后: $tapCourseItem");
   }
 
-  // event: 点击周预览Item -> 更改当前选中周Index，滑动到对应Page
+  /// event: 滑动page -> 更新state: currentWeek当前周
+  changePage(int index) {
+    currentWeekIndex.value = index + 1;
+    _autoScrollerWeekList(useAnimation: true);
+    logger.d("pager滑动前:    -> $tapCourseItem  当前page:   -> $index");
+  }
+
+  /// 计算滚动位置offset
+  ///
+  /// 让选中week显示在中间
+  double _getOffsetByCurrentWeek() {
+    var offset = 0.0;
+    final screenWidth = MyScreenUtil.getInstance().screenWidth;
+    final halfScreenWidth = screenWidth / 2;
+    final halfScreenItem = (halfScreenWidth / (42.h + 8)).ceil();
+    // 选中week
+    final selectedWeek = currentWeekIndex.value;
+    // 选课表共有多少周
+    final allWeeks = courseModel.value.courseAllPages.length;
+    if (selectedWeek > halfScreenItem &&
+        selectedWeek <= (allWeeks - halfScreenItem)) {
+      offset = selectedWeek * (42.h + 8) - (42.h / 2) - halfScreenWidth;
+    } else if (selectedWeek <= halfScreenItem) {
+      offset = 0;
+    } else {
+      offset = allWeeks * (42.h + 8) + 8 - screenWidth;
+    }
+
+    return offset;
+  }
+
+  /// event: 点击周预览Item -> 更改当前选中周Index，滑动到对应Page
   tapCourseWeek(int tapIndex) {
     tapCourseIndex = tapIndex;
     tapCourseItem = false;
@@ -271,7 +263,7 @@ class TimeTableViewModel extends GetxController {
     pageController.jumpToPage(tapIndex);
   }
 
-  //events: 导入课程事件 -> 网络请求获取课表数据 / 更新state: courseModel / 本地存储课程数据 / 计算当前时间属于第几周
+  /// events: 导入课程事件 -> 网络请求获取课表数据 / 更新state: courseModel / 本地存储课程数据 / 计算当前时间属于第几周
   void importCourseData(
     List<List<List<CourseInfo>>> newCourseData,
     String name,
@@ -303,7 +295,7 @@ class TimeTableViewModel extends GetxController {
   //   courseRepo.updateCourseModel(index, saveCourseModel);
   // }
 
-  // events: 点击切换课表 -> 显示本地第1/2课表切换
+  /// events: 点击切换课表 -> 显示本地第1/2课表切换
   void changeCourse({required bool animate}) {
     debugPrint("点击快捷切换课表");
     final allCourseModel = courseRepo.getAllCourseModel();
@@ -322,29 +314,11 @@ class TimeTableViewModel extends GetxController {
     }
   }
 
-  // events: 点击展开周预览
+  /// events: 点击展开周预览
   void openMoreInfo() {
-    // fix 当课表周为空时，展开有问题
-    if (isExpanded.value == false &&
-        courseModel.value.courseAllPages.isNotEmpty) {
-      if (currentWeekIndex.value - 1 < 3) {
-        // 位于前3周， 则滚动偏移量为0
-        courseWeekListController.jumpTo(0.0);
-      } else if (currentWeekIndex.value - 1 >= 3 &&
-          courseModel.value.courseAllPages.length -
-                  (currentWeekIndex.value - 1) >
-              3) {
-        // 位于 前3周 < ... > 后3周 之间 展开滚动，不需要动画
-        courseWeekListController.jumpTo(
-            ((currentWeekIndex.value - 1) - 3) * (Get.width / oneWeekDay));
-      } else {
-        // 位于后三周
-        final courseLength = courseModel.value.courseAllPages.length;
-        courseWeekListController.jumpTo(
-            (((courseLength ~/ oneWeekDay) - 1) * oneWeekDay +
-                    (courseLength % oneWeekDay)) *
-                (Get.width / oneWeekDay));
-      }
+    // 展开前滚动到最佳位置
+    if (!isExpanded.value) {
+      _autoScrollerWeekList(useAnimation: false);
     }
     if (courseModel.value.courseAllPages.isNotEmpty) {
       isExpanded.value = !isExpanded.value;
@@ -354,7 +328,7 @@ class TimeTableViewModel extends GetxController {
     //     duration: const Duration(seconds: 1), curve: Curves.easeInOut);
   }
 
-  // events: 界面启动 -> 读取本地课程数据 / 更新state: courseModel / 一周显示多少天
+  /// events: 界面启动 -> 读取本地课程数据 / 更新state: courseModel / 一周显示多少天
   void _initLocalCourseData() {
     initPageState();
     weekDay.value = courseRepo.getShowWeekend();

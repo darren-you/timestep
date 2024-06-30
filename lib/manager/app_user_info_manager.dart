@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
+import 'package:timestep/services/app_init_service.dart';
 
 import '../business/user/dto/app_user_dto.dart';
 import '../enumm/storage_key_enum.dart';
@@ -36,6 +37,10 @@ class AppUserInfoManager {
     // 自动登陆
     final appAccount =
         accountDataService.getAccount(AccountStorageKeyEnum.appUser);
+    if (appAccount.username == null || appAccount.password == null) {
+      logger.d('不存在本地账号信息，取消自动登录');
+      return;
+    }
     await NetManager.request(
       netFun: userInfoApi.userLogin(appAccount.username!, appAccount.password!),
       onDataSuccess: (rightData) async {

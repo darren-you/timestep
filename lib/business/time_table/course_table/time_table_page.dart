@@ -163,8 +163,6 @@ class TimeTablePages extends GetView<TimeTableViewModel> {
                             },
                             child: Obx(
                               () => Container(
-                                // margin: const EdgeInsets.symmetric(
-                                //     horizontal: 4, vertical: 2),
                                 margin: EdgeInsets.only(
                                     left: index == 0 ? 8 : 4,
                                     top: 0,
@@ -175,8 +173,6 @@ class TimeTablePages extends GetView<TimeTableViewModel> {
                                         ? 8
                                         : 4,
                                     bottom: 8),
-                                // 一行显示 7 个周Item
-                                //width: context.width / 7 - 8,
                                 width: 42.h,
                                 decoration: BoxDecoration(
                                   color: (index + 1) ==

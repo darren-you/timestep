@@ -146,8 +146,8 @@ class TodoPage extends GetView<TodoPageController> {
           controller: controller.dayInMonthScrollController,
           itemCount: controller.daysInMonthList.value.length,
           itemBuilder: (context, index) {
-            logger.d(
-                'datetimeNow: ${controller.currentDayDateTime.value} $index datetime: ${controller.daysInMonthList.value[index]}');
+            // logger.d(
+            //     'datetimeNow: ${controller.currentDayDateTime.value} $index datetime: ${controller.daysInMonthList.value[index]}');
             return GestureDetector(
               onTap: () {
                 controller.tapOneDay(controller.daysInMonthList.value[index]);

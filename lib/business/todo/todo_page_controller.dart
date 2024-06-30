@@ -29,12 +29,18 @@ class TodoPageController extends GetxController {
   void refreshDateInfo() {
     yearMonthText.value = DateFormat('y-M').format(currentDayDateTime.value);
     daysInMonthList.value = DateUtil.getDaysInMonth(currentMonthDateTime.value);
-    // 滚动
-    _scrollerByMonthChanged();
+    // 需要在绘制完成后滚动
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _scrollerByMonthChanged(useAnimation: true);
+    });
   }
 
-  /// 单击日期信息
+  /// 展开、收起 日期列表
   void tapDateTextInfo() {
+    // 展开前先滚动选中日期位置
+    if (!isExpanded.value) {
+      _scrollerByMonthChanged(useAnimation: false);
+    }
     isExpanded.value = !isExpanded.value;
   }
 
@@ -49,9 +55,10 @@ class TodoPageController extends GetxController {
     refreshDateInfo();
   }
 
-  /// 月份减
+  /// 月份加、减操作
   ///
-  /// 若为同年、同月则，则设定为今日
+  /// 若为同年、同月则，则设定选中日期为今日
+  /// 否则则设置为当月1日
   void monthLeftOrRight({required bool isLeft}) {
     var dateTime = isLeft
         ? DateUtil.getPreviousMonth(currentMonthDateTime.value)
@@ -67,38 +74,43 @@ class TodoPageController extends GetxController {
     refreshDateInfo();
   }
 
-  /// 月份滚动到第一天
+  /// 自动滚动日历列表
   ///
-  /// 本月则滚动到今天、非本月则滚动到1号
-  void _scrollerByMonthChanged() {
-    var offest = 0.0;
-    if (DateUtil.isSameYearAndMonth(currentMonthDateTime.value)) {
-      offest = _getOffsetByDay();
-    }
-
+  /// 未选中：本月则滚动到今天、非本月则滚动到1号
+  /// 选中：滚动到具体日期位置（居中显示）
+  void _scrollerByMonthChanged({required bool useAnimation}) {
+    final offest = _getOffsetByCurrentDay();
     logger.d('currentDay: ${currentMonthDateTime.value.day} offest: $offest');
-
-    dayInMonthScrollController.animateTo(offest,
-        duration: const Duration(milliseconds: 500),
-        curve: Curves.fastOutSlowIn);
+    if (useAnimation) {
+      dayInMonthScrollController.animateTo(offest,
+          duration: const Duration(milliseconds: 1800),
+          curve: Curves.fastLinearToSlowEaseIn);
+    } else {
+      dayInMonthScrollController.jumpTo(offest);
+    }
   }
 
   /// 计算滚动offset
-  double _getOffsetByDay() {
-    var offset = currentDayDateTime.value.day * (42.h + 8);
-    // 计算一屏能容纳多少item
-    final screenShowCount =
-        MyScreenUtil.getInstance().screenWidth ~/ (42.h + 8);
+  ///
+  /// 让选中day显示在中间
+  double _getOffsetByCurrentDay() {
+    // 滚动长度
+    var offset = 0.0;
+    final screenWidth = MyScreenUtil.getInstance().screenWidth;
+    final halfScreenWidth = screenWidth / 2;
+    final halfScreenItem = (halfScreenWidth / (42.h + 8)).ceil();
+    // 选中day
+    final selectedDay = currentDayDateTime.value.day;
     // 选中月有多少天
     final daysInMonth =
         DateUtil.getDaysInMonthByDateTime(currentMonthDateTime.value);
-    // 判断是否在末尾一屏内
-    if (currentDayDateTime.value.day > (daysInMonth - screenShowCount)) {
-      logger.d('${currentDayDateTime.value.day} 在末尾一屏内');
-      final leftOffset = MyScreenUtil.getInstance().screenWidth -
-          (42.h + 8) * screenShowCount -
-          8;
-      offset = (daysInMonth - screenShowCount) * (42.h + 8) - leftOffset;
+    if (selectedDay > halfScreenItem &&
+        selectedDay <= (daysInMonth - halfScreenItem)) {
+      offset = selectedDay * (42.h + 8) - (42.h / 2) - halfScreenWidth;
+    } else if (selectedDay <= halfScreenItem) {
+      offset = 0;
+    } else {
+      offset = daysInMonth * (42.h + 8) + 8 - screenWidth;
     }
 
     return offset;
@@ -107,17 +119,12 @@ class TodoPageController extends GetxController {
   /// 点击某一天
   void tapOneDay(DateTime dateTime) {
     currentDayDateTime.value = dateTime;
+    _scrollerByMonthChanged(useAnimation: true);
   }
 
   @override
   void onInit() {
     _initDateTime();
     super.onInit();
-  }
-
-  @override
-  void onReady() {
-    refreshDateInfo();
-    super.onReady();
   }
 }
