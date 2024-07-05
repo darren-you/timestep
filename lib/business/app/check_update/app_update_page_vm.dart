@@ -11,7 +11,7 @@ class AppUpdatePageViewModel extends GetxController {
   final oldAppVersion = AppInfoUtil.appVersion; // 1.0.0
 
   var updateDesc = ''.obs;
-  final Uri _url = Uri.parse('https://singlestep.cn/wejinda/app/download');
+  final Uri _url = Uri.parse('https://darrenyou.cn/wejinda/app/download');
 
   Future<void> downloadApk() async {
     if (!await launchUrl(_url)) {

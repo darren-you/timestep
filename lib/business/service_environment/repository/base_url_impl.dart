@@ -7,7 +7,7 @@ class BaseUrlImpl implements BaseUrlService {
     var baseUrl = GetStorageUtil.readData("BaseUrl");
 
     if (baseUrl == null || baseUrl == "") {
-      baseUrl = "https://singlestep.cn/wejinda";
+      baseUrl = "https://darrenyou.cn/wejinda";
     }
     return baseUrl;
   }

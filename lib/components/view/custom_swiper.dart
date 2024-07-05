@@ -78,7 +78,7 @@ class CustomSwiper extends StatelessWidget {
                           borderRadius: BorderRadius.circular(10),
                         ),
                         child: ExtendedImage.network(
-                          //"https://singlestep.cn/wejinda/res/img/swapper/swapper_${actualIndex + 1}.jpg",
+                          //"https://darrenyou.cn/wejinda/res/img/swapper/swapper_${actualIndex + 1}.jpg",
                           imgUrlList[actualIndex],
                           fit: BoxFit.cover,
                           cache: true,

@@ -6,7 +6,7 @@ class ApiPathUtil {
   static final baseUrlService = Get.find<BaseUrlService>();
   ApiPathUtil._();
 
-  // static const String springBootBaseUrl = "https://singlestep.cn/wejinda";
+  // static const String springBootBaseUrl = "https://darrenyou.cn/wejinda";
   //static const String springBootBaseUrl = "http://192.168.27.5:8080/wejinda";
 
   static const String appInfo = "/app/info";

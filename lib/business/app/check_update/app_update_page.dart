@@ -42,7 +42,7 @@ class AppUpdatePage extends GetView<AppUpdatePageViewModel> {
                         children: [
                           ClipOval(
                             child: Image.network(
-                              "https://singlestep.cn/wejinda/res/img/swapper_2.png",
+                              "https://darrenyou.cn/wejinda/res/img/swapper_2.png",
                               width: 100,
                               height: 100,
                               fit: BoxFit.fill,

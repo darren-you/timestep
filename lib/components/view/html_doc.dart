@@ -8,7 +8,7 @@ class HtmlDoc {
     Map<String, dynamic> arg = {
       "appbarBgColor": Colors.white,
       "title": "服务协议",
-      "url": "https://singlestep.cn/wejinda/res/doc/service.html"
+      "url": "https://darrenyou.cn/wejinda/res/doc/service.html"
     };
     Get.toNamed(PagePathUtil.webDocPage, arguments: arg);
   }
@@ -17,7 +17,7 @@ class HtmlDoc {
     Map<String, dynamic> arg = {
       "appbarBgColor": Colors.white,
       "title": "隐私政策",
-      "url": "https://singlestep.cn/wejinda/res/doc/private.html"
+      "url": "https://darrenyou.cn/wejinda/res/doc/private.html"
     };
     Get.toNamed(PagePathUtil.webDocPage, arguments: arg);
   }
@@ -45,7 +45,7 @@ class HtmlDoc {
     Map<String, dynamic> arg = {
       "appbarBgColor": Colors.white,
       "title": "校历",
-      "url": "https://singlestep.cn/wejinda/res/doc/schoolcalendar.html"
+      "url": "https://darrenyou.cn/wejinda/res/doc/schoolcalendar.html"
     };
     Get.toNamed(PagePathUtil.webDocPage, arguments: arg);
   }
@@ -54,7 +54,7 @@ class HtmlDoc {
     Map<String, dynamic> arg = {
       "appbarBgColor": Colors.white,
       "title": "校园地图", // todo: 这个地方最好获取html中的title
-      "url": "https://singlestep.cn/wejinda/res/doc/schoolmap.html"
+      "url": "https://darrenyou.cn/wejinda/res/doc/schoolmap.html"
     };
     Get.toNamed(PagePathUtil.webDocPage, arguments: arg);
   }

@@ -61,7 +61,7 @@ Widget _userBg(BuildContext context, UserPageViewModel controller) {
                                 .userBgImg!
                                 .isEmpty
                             //userbgdefault
-                            ? "https://singlestep.cn/wejinda/res/img/mybg1.jpg"
+                            ? "https://darrenyou.cn/wejinda/res/img/mybg1.jpg"
                             : AppUserInfoManager().appUserDTO.value!.userBgImg!,
                         fit: BoxFit.cover,
                         cache: true,
