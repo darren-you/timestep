@@ -42,7 +42,7 @@ class WejindaApp extends StatelessWidget {
           defaultTransition: Transition.native, // 页面跳转默认动画
           routingCallback: RoutingListener.routingListner,
           theme: ThemeData(platform: TargetPlatform.iOS),
-          debugShowCheckedModeBanner: false,
+          debugShowCheckedModeBanner: true,
           onInit: () {
             MyScreenUtil.getInstance().init(context);
           },

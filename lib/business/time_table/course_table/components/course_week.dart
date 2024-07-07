@@ -80,8 +80,6 @@ SizedBox _leftTimeBar() {
           return Container(
             alignment: Alignment.center,
             height: containerHeight * 2,
-            // color: Color.fromARGB(Random().nextInt(255), Random().nextInt(255),
-            //     Random().nextInt(255), Random().nextInt(255)),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
@@ -133,38 +131,43 @@ SizedBox _leftTimeBar() {
 }
 
 /// 时间线绘制
-Widget _timeLineWidget(BuildContext context) {
-  return Positioned(
-    top: 90.h * 3,
-    child: Row(
-      children: [
-        Container(
-          width: 5.w,
-          height: 5.w,
-          //margin: EdgeInsets.only(left: 1.w),
-          decoration: BoxDecoration(
-            color: Colors.red,
-            borderRadius: BorderRadius.all(Radius.circular(5.w)),
+Widget _timeLineWidget(BuildContext context, int pageIndex) {
+  final timeTableViewModel = Get.find<TimeTableViewModel>();
+  return timeTableViewModel.nowWeek == (pageIndex + 1)
+      ? Positioned(
+          top: 90.h * 3,
+          child: Row(
+            children: [
+              Container(
+                width: 5.w,
+                height: 5.w,
+                //margin: EdgeInsets.only(left: 1.w),
+                decoration: BoxDecoration(
+                  color: Colors.red,
+                  borderRadius: BorderRadius.all(Radius.circular(5.w)),
+                ),
+              ),
+              Container(
+                width: context.width - 36.w - 5.w - 4.w,
+                height: 1.h,
+                padding: EdgeInsets.only(right: 4.w),
+                color: Colors.red,
+              ),
+            ],
           ),
-        ),
-        Container(
-          width: context.width - 36.w - 5.w - 4.w,
-          height: 1.h,
-          padding: EdgeInsets.only(right: 4.w),
-          color: Colors.red,
-        ),
-      ],
-    ),
-  );
+        )
+      : const SizedBox();
 }
 
 /// 课程表格
 Widget _courseItemWidget(OneWeekModel oneWeekModel) {
   final viewModel = Get.find<TimeTableViewModel>();
-  return Expanded(
-    child: Obx(() => Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: List.generate(viewModel.weekDay.value.day, (day) {
+  return Obx(
+    () => Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: List.generate(
+        viewModel.weekDay.value.day,
+        (day) {
           // 用Column绘制一天所有课程Item
           return Expanded(
             child: Container(
@@ -177,68 +180,73 @@ Widget _courseItemWidget(OneWeekModel oneWeekModel) {
                 borderRadius: BorderRadius.circular(10.r),
               ),
               child: Column(
-                children: oneWeekModel.courseData[day].map((course) {
-                  // 根据是否连课返回视图
-                  if (course!.name.isEmpty) {
-                    return Container(
-                      color: Colors.transparent,
-                      height: course.showItemLength * containerHeight,
-                    );
-                  } else {
-                    return Container(
-                      padding:
-                          EdgeInsets.symmetric(horizontal: 8.w, vertical: 4.h),
-                      height: containerHeight * course.showItemLength,
-                      child: Container(
-                        padding: EdgeInsets.all(4.r),
-                        width: double.infinity,
-                        height: containerHeight,
-                        alignment: Alignment.center,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(8.r),
-                          color: HexColor(course.color, alpha: 15),
-                          border: Border.all(
-                            color: HexColor(course.color),
-                            width: 1.w,
+                children: oneWeekModel.courseData[day].map(
+                  (course) {
+                    // 根据是否连课返回视图
+                    if (course!.name.isEmpty) {
+                      return Container(
+                        color: Colors.transparent,
+                        height: course.showItemLength * containerHeight,
+                      );
+                    } else {
+                      return Container(
+                        padding: EdgeInsets.symmetric(
+                            horizontal: 8.w, vertical: 4.h),
+                        height: containerHeight * course.showItemLength,
+                        child: Container(
+                          padding: EdgeInsets.all(4.r),
+                          width: double.infinity,
+                          height: containerHeight,
+                          alignment: Alignment.center,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(8.r),
+                            color: HexColor(course.color, alpha: 15),
+                            border: Border.all(
+                              color: HexColor(course.color),
+                              width: 1.w,
+                            ),
+                          ),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text(
+                                course.name,
+                                style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    color: HexColor(course.color)),
+                              ),
+                              Padding(padding: EdgeInsets.only(top: 4.h)),
+                              Text(
+                                '@${course.teacher}',
+                                style: TextStyle(color: HexColor(course.color)),
+                              ),
+                              // const Padding(
+                              //     padding: EdgeInsets.only(bottom: 2)),
+                              Text(
+                                course.address,
+                                style: TextStyle(
+                                    fontSize: 10.sp,
+                                    color: HexColor(course.color)),
+                              ),
+                            ],
                           ),
                         ),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text(
-                              course.name,
-                              style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  color: HexColor(course.color)),
-                            ),
-                            Padding(padding: EdgeInsets.only(top: 4.h)),
-                            Text(
-                              '@${course.teacher}',
-                              style: TextStyle(color: HexColor(course.color)),
-                            ),
-                            // const Padding(
-                            //     padding: EdgeInsets.only(bottom: 2)),
-                            Text(
-                              course.address,
-                              style: TextStyle(
-                                  fontSize: 10.sp,
-                                  color: HexColor(course.color)),
-                            ),
-                          ],
-                        ),
-                      ),
-                    );
-                  }
-                }).toList(),
+                      );
+                    }
+                  },
+                ).toList(),
               ),
             ),
           );
-        }))),
+        },
+      ),
+    ),
   );
 }
 
 /// 绘制一周的所有课程Item
-Expanded _courseItems(OneWeekModel oneWeekModel, BuildContext context) {
+Expanded _courseItems(
+    BuildContext context, OneWeekModel oneWeekModel, int pageIndex) {
   return Expanded(
     child: MediaQuery.removePadding(
       context: context,
@@ -255,7 +263,7 @@ Expanded _courseItems(OneWeekModel oneWeekModel, BuildContext context) {
               child: Stack(
                 children: [
                   // 时间线
-                  _timeLineWidget(context),
+                  _timeLineWidget(context, pageIndex),
 
                   // 课表表格
                   _courseItemWidget(oneWeekModel),
@@ -283,7 +291,7 @@ class CourseWeek extends StatelessWidget {
           _weekTimeNav(oneWeekModel, pageIndex),
 
           // 课程 Item 方块绘制
-          _courseItems(oneWeekModel, context),
+          _courseItems(context, oneWeekModel, pageIndex),
         ],
       ),
     );

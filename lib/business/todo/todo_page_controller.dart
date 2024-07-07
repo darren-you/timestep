@@ -18,6 +18,8 @@ class TodoPageController extends GetxController {
 
   // UI
   final dayInMonthScrollController = ScrollController();
+  final todoPageController =
+      PageController(initialPage: DateTime.now().day - 1);
 
   /// 初始化日期数据
   void _initDateTime() {
@@ -31,7 +33,8 @@ class TodoPageController extends GetxController {
     daysInMonthList.value = DateUtil.getDaysInMonth(currentMonthDateTime.value);
     // 需要在绘制完成后滚动
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      _scrollerByMonthChanged(useAnimation: true);
+      _scrollerByDayChanged(useAnimation: true);
+      _pageScrollerByDay();
     });
   }
 
@@ -39,7 +42,7 @@ class TodoPageController extends GetxController {
   void tapDateTextInfo() {
     // 展开前先滚动选中日期位置
     if (!isExpanded.value) {
-      _scrollerByMonthChanged(useAnimation: false);
+      _scrollerByDayChanged(useAnimation: false);
     }
     isExpanded.value = !isExpanded.value;
   }
@@ -63,7 +66,6 @@ class TodoPageController extends GetxController {
     var dateTime = isLeft
         ? DateUtil.getPreviousMonth(currentMonthDateTime.value)
         : DateUtil.getAfterMonth(currentMonthDateTime.value);
-
     if (DateUtil.isSameYearAndMonth(dateTime)) {
       dateTime = DateTime(
           DateTime.now().year, DateTime.now().month, DateTime.now().day);
@@ -78,7 +80,7 @@ class TodoPageController extends GetxController {
   ///
   /// 未选中：本月则滚动到今天、非本月则滚动到1号
   /// 选中：滚动到具体日期位置（居中显示）
-  void _scrollerByMonthChanged({required bool useAnimation}) {
+  void _scrollerByDayChanged({required bool useAnimation}) {
     final offest = _getOffsetByCurrentDay();
     logger.d('currentDay: ${currentMonthDateTime.value.day} offest: $offest');
     if (useAnimation) {
@@ -119,7 +121,23 @@ class TodoPageController extends GetxController {
   /// 点击某一天
   void tapOneDay(DateTime dateTime) {
     currentDayDateTime.value = dateTime;
-    _scrollerByMonthChanged(useAnimation: true);
+    _scrollerByDayChanged(useAnimation: true);
+    _pageScrollerByDay();
+  }
+
+  /// 滑动Todo PageView
+  ///
+  /// 需要同步滑动dayInMonth
+  void todoPageChanged(int pageIndex) {
+    currentDayDateTime.value = DateTime(currentDayDateTime.value.year,
+        currentDayDateTime.value.month, pageIndex);
+    _scrollerByDayChanged(useAnimation: true);
+    logger.d('当前 index: $pageIndex');
+  }
+
+  /// PageView自动滚动
+  void _pageScrollerByDay() {
+    todoPageController.jumpToPage(currentDayDateTime.value.day - 1);
   }
 
   @override

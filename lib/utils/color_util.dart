@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 
 class HexColor extends Color {
@@ -21,4 +23,13 @@ class HexColor extends Color {
 
   HexColor(final String hexColor, {int alpha = 100})
       : super(_getColorFromHex(hexColor, alpha));
+}
+
+class ColorUtil {
+  ColorUtil._();
+
+  static Color getRandomColor() {
+    final random = Random();
+    return Color(0xFFFFFFFF & random.nextInt(0xFFFFFFFF));
+  }
 }

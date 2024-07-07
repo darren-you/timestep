@@ -3,6 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:timestep/business/todo/todo_page_controller.dart';
+import 'package:timestep/utils/color_util.dart';
 import 'package:timestep/utils/date_util.dart';
 
 import '../../components/container/custom_icon_button.dart';
@@ -37,18 +38,7 @@ class TodoPage extends GetView<TodoPageController> {
             ),
 
             // Todo内容
-            Expanded(
-              child: PageView.builder(
-                itemCount: 5,
-                //controller: controller.pageController,
-                onPageChanged: (pageIndex) {},
-                itemBuilder: (context, index) {
-                  return Center(
-                    child: Text("第 $index 页"),
-                  );
-                },
-              ),
-            ),
+            _todoWiget(controller),
 
             // 底部导航行高度
             Padding(
@@ -198,6 +188,98 @@ class TodoPage extends GetView<TodoPageController> {
                       ),
                     ),
                   ),
+                ),
+              ),
+            );
+          },
+        ),
+      ),
+    );
+  }
+
+  /// 时间margin
+  double _timeMargin(int index) {
+    var margin = 0.0.h;
+    if (index == 0) {
+      margin = 0.0.h;
+    } else if (index == 1 || index == 24) {
+      margin = 36.h;
+    } else {
+      margin = 44.h;
+    }
+
+    return margin;
+  }
+
+  /// ToDo 内容部分
+  Widget _todoWiget(TodoPageController controller) {
+    return Expanded(
+      child: Obx(
+        () => PageView.builder(
+          itemCount: controller.daysInMonthList.value.length,
+          controller: controller.todoPageController,
+          onPageChanged: (pageIndex) =>
+              controller.todoPageChanged(pageIndex + 1),
+          itemBuilder: (context, index) {
+            return MediaQuery.removePadding(
+              context: context,
+              removeTop: true,
+              child: SingleChildScrollView(
+                physics: const AlwaysScrollableScrollPhysics(),
+                child: Stack(
+                  children: [
+                    Positioned(
+                      left: 0,
+                      top: 8.h,
+                      child: Column(
+                        children: List.generate(25, (index) {
+                          return Container(
+                            alignment: Alignment.topCenter,
+                            width: 36.w,
+                            //height: 60.h,
+                            margin: EdgeInsets.only(top: _timeMargin(index)),
+                            //color: ColorUtil.getRandomColor(),
+                            child: Container(
+                              alignment: Alignment.center,
+                              height: 16.h,
+                              //color: Colors.amber,
+                              child: Text(
+                                '$index:00',
+                                style: TextStyle(fontSize: 10.sp),
+                              ),
+                            ),
+                          );
+                        }),
+                      ),
+                    ),
+                    Positioned(
+                      //left: 36,
+                      //top: 0,
+                      child: Row(
+                        children: [
+                          SizedBox(width: 36.w),
+                          Expanded(
+                            child: Column(
+                              children: [
+                                SizedBox(height: 8.h),
+                                Column(
+                                  children: List.generate(24, (index) {
+                                    return Container(
+                                      alignment: Alignment.center,
+                                      //margin: EdgeInsets.only(top: index == 0 ? 8.h : 0),
+                                      height: 60.h,
+                                      color: ColorUtil.getRandomColor(),
+                                    );
+                                  }),
+                                ),
+                                SizedBox(height: 8.h),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
                 ),
               ),
             );

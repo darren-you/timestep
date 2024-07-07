@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 
-/*
-  @description 定义自定义颜色枚举类
- */
+/// 定义自定义颜色枚举类
 enum MyColors {
   background1(color: Color.fromARGB(250, 240, 240, 240)),
   background(color: Color(0xFFF4F6F5)),
