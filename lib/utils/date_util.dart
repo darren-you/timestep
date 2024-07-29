@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:date_format/date_format.dart';
+import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 class DateUtil {
@@ -71,6 +72,13 @@ class DateUtil {
     return formatDate(dateTime, [h, ':', m, ' ', timeEnd]);
   }
 
+  /// 根据DateTime返回02:28格式
+  static String getFormatTime(DateTime dateTime) {
+    final time = DateFormat('HH:mm').format(DateTime.now());
+    debugPrint("time: $time");
+    return DateFormat('HH:mm').format(DateTime.now());
+  }
+
   /// 生成随机DateTime
   static DateTime getRandomDateTime() {
     final now = DateTime.now();
@@ -129,5 +137,10 @@ class DateUtil {
     } else {
       return DateTime(year, month + 1, 1);
     }
+  }
+
+  /// 计算两个DateTime之间的分钟数差值
+  static int getMinuteDiff(DateTime dateTime1, DateTime dateTime2) {
+    return dateTime1.difference(dateTime2).inMinutes;
   }
 }

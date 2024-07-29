@@ -1,6 +1,10 @@
+import 'package:date_format/date_format.dart';
+import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
+import 'package:timestep/utils/date_util.dart';
 
 import '../../../../enumm/color_enum.dart';
 import '../../../../utils/color_util.dart';
@@ -8,7 +12,7 @@ import '../../model/course_model.dart';
 import '../timetable_vm.dart';
 
 /// 课程Item的高
-final containerHeight = 90.0.h;
+final containerHeight = 100.0.h;
 
 /// 绘制每周的时间信息
 Container _weekTimeNav(OneWeekModel oneWeekModel, int pageIndex) {
@@ -73,52 +77,44 @@ SizedBox _leftTimeBar() {
     width: 36.w,
     child: Column(
       children: List.generate(
-        viewModel.courseModel.value.courseTime.length ~/ 2,
+        viewModel.courseModel.value.courseTime.length,
         (index) {
           final timeInfo = viewModel.courseModel.value.courseTime;
-          index = index * 2;
           return Container(
             alignment: Alignment.center,
-            height: containerHeight * 2,
+            height: containerHeight,
             child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
-                SizedBox(
-                  child: Column(
-                    children: [
-                      Text(
-                        '${index + 1}',
-                        style: const TextStyle(fontWeight: FontWeight.bold),
-                      ),
-                      Padding(padding: EdgeInsets.only(bottom: 4.h)),
-                      Text(
-                        timeInfo[index].start,
-                        style: TextStyle(fontSize: 10.sp),
-                      ),
-                      Text(
-                        timeInfo[index].end,
-                        style: TextStyle(fontSize: 10.sp),
-                      )
-                    ],
+                Container(
+                  height: 10.h,
+                  alignment: Alignment.center,
+                  margin: EdgeInsets.only(top: 5.h),
+                  child: Text(
+                    timeInfo[index].start,
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      height: -0.01,
+                      fontSize: 10.sp,
+                    ),
                   ),
                 ),
-                SizedBox(
-                  child: Column(
-                    children: [
-                      Text(
-                        '${index + 2}',
-                        style: const TextStyle(fontWeight: FontWeight.bold),
-                      ),
-                      Padding(padding: EdgeInsets.only(bottom: 4.h)),
-                      Text(
-                        timeInfo[index + 1].start,
-                        style: TextStyle(fontSize: 10.sp),
-                      ),
-                      Text(
-                        timeInfo[index + 1].end,
-                        style: TextStyle(fontSize: 10.sp),
-                      )
-                    ],
+                const Expanded(child: SizedBox()),
+                Text(
+                  '${index + 1}',
+                  style: const TextStyle(fontWeight: FontWeight.bold),
+                ),
+                const Expanded(child: SizedBox()),
+                Container(
+                  height: 10.h,
+                  alignment: Alignment.topCenter,
+                  margin: EdgeInsets.only(bottom: 5.h),
+                  child: Text(
+                    timeInfo[index].end,
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      height: 1.01,
+                      fontSize: 10.sp,
+                    ),
                   ),
                 ),
               ],
@@ -134,26 +130,46 @@ SizedBox _leftTimeBar() {
 Widget _timeLineWidget(BuildContext context, int pageIndex) {
   final timeTableViewModel = Get.find<TimeTableViewModel>();
   return timeTableViewModel.nowWeek == (pageIndex + 1)
-      ? Positioned(
-          top: 90.h * 3,
-          child: Row(
-            children: [
-              Container(
-                width: 5.w,
-                height: 5.w,
-                //margin: EdgeInsets.only(left: 1.w),
-                decoration: BoxDecoration(
-                  color: Colors.red,
-                  borderRadius: BorderRadius.all(Radius.circular(5.w)),
+      ? Obx(
+          () => Positioned(
+            top: timeTableViewModel.timeLinePosition.value,
+            //top: 5.h,
+            //top: 85.h,
+            //top: 95.h,
+            child: Row(
+              children: [
+                Container(
+                  width: 36.w,
+                  height: 10.h,
+                  //color: Colors.red,
+                  alignment: Alignment.center,
+                  child: Text(
+                    timeTableViewModel.nowTime.value,
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      color: Colors.red,
+                      height: -0.01,
+                      fontSize: 10.sp,
+                    ),
+                  ),
                 ),
-              ),
-              Container(
-                width: context.width - 36.w - 5.w - 4.w,
-                height: 1.h,
-                padding: EdgeInsets.only(right: 4.w),
-                color: Colors.red,
-              ),
-            ],
+                Container(
+                  width: 5.h,
+                  height: 5.h,
+                  //margin: EdgeInsets.only(left: 1.w),
+                  decoration: BoxDecoration(
+                    color: Colors.red,
+                    borderRadius: BorderRadius.all(Radius.circular(5.h)),
+                  ),
+                ),
+                Container(
+                  width: context.width - 36.w - 5.w - 4.w,
+                  height: 1.h,
+                  padding: EdgeInsets.only(right: 4.w),
+                  color: Colors.red,
+                ),
+              ],
+            ),
           ),
         )
       : const SizedBox();
@@ -170,72 +186,61 @@ Widget _courseItemWidget(OneWeekModel oneWeekModel) {
         (day) {
           // 用Column绘制一天所有课程Item
           return Expanded(
-            child: Container(
-              decoration: BoxDecoration(
-                // fixme 此物需要精确到，仅当前tian显示底色
-                // color: timeTableController.nowDate.weekday == (i + 1)
-                //     ? Colors.black12
-                //     : Colors.transparent,
-
-                borderRadius: BorderRadius.circular(10.r),
-              ),
-              child: Column(
-                children: oneWeekModel.courseData[day].map(
-                  (course) {
-                    // 根据是否连课返回视图
-                    if (course!.name.isEmpty) {
-                      return Container(
-                        color: Colors.transparent,
-                        height: course.showItemLength * containerHeight,
-                      );
-                    } else {
-                      return Container(
-                        padding: EdgeInsets.symmetric(
-                            horizontal: 8.w, vertical: 4.h),
-                        height: containerHeight * course.showItemLength,
-                        child: Container(
-                          padding: EdgeInsets.all(4.r),
-                          width: double.infinity,
-                          height: containerHeight,
-                          alignment: Alignment.center,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(8.r),
-                            color: HexColor(course.color, alpha: 15),
-                            border: Border.all(
-                              color: HexColor(course.color),
-                              width: 1.w,
-                            ),
-                          ),
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Text(
-                                course.name,
-                                style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    color: HexColor(course.color)),
-                              ),
-                              Padding(padding: EdgeInsets.only(top: 4.h)),
-                              Text(
-                                '@${course.teacher}',
-                                style: TextStyle(color: HexColor(course.color)),
-                              ),
-                              // const Padding(
-                              //     padding: EdgeInsets.only(bottom: 2)),
-                              Text(
-                                course.address,
-                                style: TextStyle(
-                                    fontSize: 10.sp,
-                                    color: HexColor(course.color)),
-                              ),
-                            ],
+            child: Column(
+              children: oneWeekModel.courseData[day].map(
+                (course) {
+                  // 根据是否连课返回视图
+                  if (course!.name.isEmpty) {
+                    return Container(
+                      color: Colors.transparent,
+                      height: course.showItemLength * containerHeight,
+                    );
+                  } else {
+                    return Container(
+                      padding:
+                          EdgeInsets.symmetric(horizontal: 4.w, vertical: 10.h),
+                      height: containerHeight * course.showItemLength,
+                      child: Container(
+                        padding: EdgeInsets.all(4.r),
+                        height: containerHeight,
+                        alignment: Alignment.center,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(8.r),
+                          color: HexColor(course.color, alpha: 15),
+                          border: Border.all(
+                            color: HexColor(course.color),
+                            width: 1.h,
                           ),
                         ),
-                      );
-                    }
-                  },
-                ).toList(),
-              ),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              course.name,
+                              style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  color: HexColor(course.color)),
+                            ),
+                            Padding(padding: EdgeInsets.only(top: 4.h)),
+                            Text(
+                              '@${course.teacher}',
+                              style: TextStyle(color: HexColor(course.color)),
+                            ),
+                            // const Padding(
+                            //     padding: EdgeInsets.only(bottom: 2)),
+                            Text(
+                              course.address,
+                              style: TextStyle(
+                                  fontSize: 10.sp,
+                                  color: HexColor(course.color)),
+                            ),
+                          ],
+                        ),
+                      ),
+                    );
+                  }
+                },
+              ).toList(),
             ),
           );
         },
@@ -247,29 +252,26 @@ Widget _courseItemWidget(OneWeekModel oneWeekModel) {
 /// 绘制一周的所有课程Item
 Expanded _courseItems(
     BuildContext context, OneWeekModel oneWeekModel, int pageIndex) {
+  final viewModel = Get.find<TimeTableViewModel>();
   return Expanded(
     child: MediaQuery.removePadding(
       context: context,
       removeTop: true,
       child: SingleChildScrollView(
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
+        controller: viewModel.courseScrollerController,
+        child: Stack(
           children: [
-            // 左侧课程时间列
-            _leftTimeBar(),
-
-            // 课表 Tab Item部分
-            Expanded(
-              child: Stack(
-                children: [
-                  // 时间线
-                  _timeLineWidget(context, pageIndex),
-
-                  // 课表表格
-                  _courseItemWidget(oneWeekModel),
-                ],
-              ),
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                // 左侧课程时间列
+                _leftTimeBar(),
+                Expanded(
+                  child: _courseItemWidget(oneWeekModel),
+                ),
+              ],
             ),
+            _timeLineWidget(context, pageIndex),
           ],
         ),
       ),

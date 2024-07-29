@@ -1,10 +1,14 @@
+import 'dart:async';
+
 import 'package:flutter/widgets.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:date_format/date_format.dart';
+import 'package:intl/intl.dart';
 import 'package:timestep/services/app_init_service.dart';
 
 import '../../../enumm/course_enum.dart';
+import '../../../utils/date_util.dart';
 import '../../../utils/my_screen_util.dart';
 import '../model/course_model.dart';
 import '../my_course/model/course_info.dart';
@@ -31,6 +35,12 @@ class TimeTableViewModel extends GetxController {
   var changeCourseSate = ChangeCourseEnum.off.obs; // 是否开启课程快捷切换
   var courseModel = CourseModel.empty().obs;
   var isExpanded = false.obs;
+
+  // 时间线相关
+  var nowTime = DateFormat('HH:mm').format(DateTime.now()).obs;
+  var timeLinePosition = 0.0.obs;
+  ScrollController courseScrollerController = ScrollController();
+  late Timer _timer;
 
   /// 初始化课表数据
   CourseModel initCourseModel(
@@ -335,18 +345,87 @@ class TimeTableViewModel extends GetxController {
     changeCourseSate.value = courseRepo.getChangeCourse();
   }
 
+  /// 更新当前时间对应的位置、时间
+  void getNowTimePosition() {
+    nowTime.value = DateFormat('HH:mm').format(DateTime.now());
+    final timeInfo = courseModel.value.courseTime;
+
+    for (var i = 0; i < timeInfo.length; i++) {
+      final startStr = timeInfo[i].start.split(':');
+      final endStr = timeInfo[i].end.split(':');
+
+      final startTime = DateTime(
+        DateTime.now().year,
+        DateTime.now().month,
+        DateTime.now().day,
+        int.parse(startStr[0]),
+        int.parse(startStr[1]),
+      );
+
+      final endTime = DateTime(
+        DateTime.now().year,
+        DateTime.now().month,
+        DateTime.now().day,
+        int.parse(endStr[0]),
+        int.parse(endStr[1]),
+      );
+
+      debugPrint(
+          "startTime:${startTime.toString()}, endTime:${endTime.toString()}");
+
+      // 在某节课时间内
+      if (startTime.isBefore(DateTime.now()) &&
+          endTime.isAfter(DateTime.now())) {
+        timeLinePosition.value =
+            (DateUtil.getMinuteDiff(DateTime.now(), startTime) * (80.h / 45) +
+                5.h +
+                100.h * i);
+        debugPrint("在课内: ${timeLinePosition.value.toString()}");
+        break;
+      }
+      // 下课时间段
+      if ((i + 1) < timeInfo.length) {
+        final nextStartStr = timeInfo[i + 1].start.split(':');
+        final nextstartTime = DateTime(
+          DateTime.now().year,
+          DateTime.now().month,
+          DateTime.now().day,
+          int.parse(nextStartStr[0]),
+          int.parse(nextStartStr[1]),
+        );
+
+        if (endTime.isBefore(DateTime.now()) &&
+            nextstartTime.isAfter(DateTime.now())) {
+          timeLinePosition.value = 100.h * i + 95.h;
+          debugPrint("在课间: ${timeLinePosition.value.toString()}");
+          break;
+        }
+      }
+    }
+  }
+
   @override
   void onInit() {
+    super.onInit();
+
     // 界面启动时，加载本地课程数据
     _initLocalCourseData();
-
-    super.onInit();
   }
 
   @override
   void onReady() {
-    toNowWeekPage(animate: false); // 自动滑动到当前周Page
-
     super.onReady();
+
+    // 自动滑动到当前周Page
+    toNowWeekPage(animate: false);
+    // 每分钟更新当前时间位置
+    getNowTimePosition();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      debugPrint("这里的代码会在UI更新后执行");
+      courseScrollerController.jumpTo(timeLinePosition.value);
+    });
+    _timer = Timer.periodic(const Duration(milliseconds: 10), (Timer t) {
+      getNowTimePosition();
+    });
   }
 }

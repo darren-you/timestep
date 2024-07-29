@@ -39,7 +39,32 @@ const localTestCourseData = {
       [],
       []
     ],
-    [[], [], [], [], [], [], [], [], [], [], [], []],
+    [
+      [
+        {
+          "name": "English",
+          "week": 1,
+          "weekType": 0,
+          "timeStart": 1,
+          "timeEnd": 1,
+          "weekStart": 5,
+          "weekEnd": 12,
+          "teacher": "DY",
+          "address": "A107",
+        },
+      ],
+      [],
+      [],
+      [],
+      [],
+      [],
+      [],
+      [],
+      [],
+      [],
+      [],
+      []
+    ],
     [
       [
         {
